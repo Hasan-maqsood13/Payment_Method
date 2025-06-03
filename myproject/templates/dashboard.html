@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 10px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 5px 0 30px;
+            color: #333;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        /* Cards container */
+        .cards {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        /* Each card styling */
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            padding: 25px 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+            color: #007bff;
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px;
+            color: #555;
+            text-align: left;
+        }
+
+        .features li {
+            margin-bottom: 10px;
+        }
+
+        .subscribe-btn {
+            background-color: #007bff;
+            border: none;
+            padding: 12px;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .subscribe-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to the Dashboard</h1>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+
+        <div class="cards" style="margin-top: 80px;">
+            <!-- Basic Plan -->
+            <div class="card">
+                <h2>Basic</h2>
+                <div class="price">$5 / month</div>
+                <ul class="features">
+                    <li>Access to basic content</li>
+                    <li>Standard support</li>
+                    <li>1 device login</li>
+                </ul>
+                <button class="subscribe-btn" onclick="subscribe('basic')">Subscribe</button>
+            </div>
+
+            <!-- Standard Plan -->
+            <div class="card">
+                <h2>Standard</h2>
+                <div class="price">$15 / month</div>
+                <ul class="features">
+                    <li>Everything in Basic</li>
+                    <li>HD streaming</li>
+                    <li>3 device logins</li>
+                    <li>Priority support</li>
+                </ul>
+                <button class="subscribe-btn" onclick="subscribe('standard')">Subscribe</button>
+
+            </div>
+
+            <!-- Premium Plan -->
+            <div class="card">
+                <h2>Premium</h2>
+                <div class="price">$30 / month</div>
+                <ul class="features">
+                    <li>Everything in Standard</li>
+                    <li>4K Ultra HD</li>
+                    <li>Unlimited devices</li>
+                    <li>24/7 Dedicated support</li>
+                </ul>
+                <button class="subscribe-btn" onclick="subscribe('premium')">Subscribe</button>
+            </div>
+        </div>
+    </div>
+    <form id="subscribe-form" method="POST" action="{% url 'create_checkout_session' %}">
+    {% csrf_token %}
+    <input type="hidden" name="plan" id="plan-input" />
+</form>
+
+<script>
+    function subscribe(plan) {
+        document.getElementById('plan-input').value = plan;
+        document.getElementById('subscribe-form').submit();
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+{% if messages %}
+    <script>
+        {% for message in messages %}
+        Swal.fire({
+            icon: 'warning',
+            title: 'Subscription Notice',
+            text: '{{ message }}',
+            confirmButtonText: 'OK'
+        });
+        {% endfor %}
+    </script>
+{% endif %}
+
+</body>
+
+</html>

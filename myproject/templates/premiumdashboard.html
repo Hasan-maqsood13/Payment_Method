@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Dashboard</title>
+</head>
+<body>
+    <h1>Premium Dashboard!</h1>
+    <p>Hello, <strong>{{ user.username }}</strong>!</p>
+    
+    <p>You have subscribed to the <strong>{{ subscription.plan_name }}</strong> plan for <strong>${{ subscription.amount }}</strong>.</p>
+    
+    <form method="post" action="{% url 'cancel_subscription' %}" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" style="background-color: red; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Cancel Subscription
+        </button>
+    </form>
+
+    <form method="post" action="{% url 'logout' %}" style="display: inline; margin-left: 10px;">
+        {% csrf_token %}
+        <button type="submit" style="background-color: #555; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">
+            Logout
+        </button>
+    </form>
+</body>
+</html>
